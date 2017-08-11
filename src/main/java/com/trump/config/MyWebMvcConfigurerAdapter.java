@@ -10,12 +10,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
 
     /**
+     * 配置静态访问资源
      * 自定义资源映射addResourceHandlers
      *
      * @param registry
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         super.addResourceHandlers(registry);
     }
 
@@ -27,7 +29,8 @@ public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         //这样访问http://localhost:8080/toLogin就跳转到login.jsp页面了
-        registry.addViewController("/toLogin").setViewName("login");
+        registry.addViewController("/loginAction").setViewName("login");
+        registry.addViewController("/indexAction").setViewName("index");
         super.addViewControllers(registry);
     }
 
@@ -40,11 +43,11 @@ public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         // addPathPatterns 用于添加拦截规则
         // excludePathPatterns 用户排除拦截
-        registry.addInterceptor(new MyInterceptor())
-                //拦截所有请求
-                .addPathPatterns("/**")
-                //排除了/toLogin和/login请求的拦截
-                .excludePathPatterns("/toLogin", "/login");
+//        registry.addInterceptor(new MyInterceptor())
+//                //拦截所有请求
+//                .addPathPatterns("/**")
+//                //排除了/toLogin和/login请求的拦截
+//                .excludePathPatterns("/toLogin", "/test/login");
         super.addInterceptors(registry);
     }
 

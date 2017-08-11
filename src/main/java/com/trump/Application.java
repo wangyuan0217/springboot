@@ -1,18 +1,20 @@
 package com.trump;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.trump.domain.TestBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.sql.DataSource;
 
-@SpringBootApplication
-@EnableConfigurationProperties({TestBean.class})
+@SpringBootApplication  // same as @Configuration @EnableAutoConfiguration @ComponentScan
+//@EnableScheduling
+//@EnableTransactionManagement //开启事务支持，建议在启动类上增加
+@RestController
 public class Application {
 
     public static void main(String[] args) {
@@ -22,8 +24,8 @@ public class Application {
     @Autowired
     private Environment env;
 
-    //destroy-method="close"的作用是
-    //当数据库连接不使用的时候,就把该连接重新放到数据池中,方便下次使用调用.
+    //Spring Boot默认使用tomcat-jdbc数据源  这里是druid数据源配置
+    //destroy-method="close"的作用是当数据库连接不使用的时候,就把该连接重新放到数据池中,方便下次使用调用.
     @Bean(destroyMethod = "close")
     public DataSource dataSource() {
         DruidDataSource dataSource = new DruidDataSource();
@@ -40,6 +42,12 @@ public class Application {
         dataSource.setTestWhileIdle(true);//建议配置为true，不影响性能，并且保证安全性。
         dataSource.setPoolPreparedStatements(false);//是否缓存preparedStatement，也就是PSCache
         return dataSource;
+    }
+
+
+    @RequestMapping("/")
+    public String index() {
+        return "Hello Spring Boot";
     }
 
 }

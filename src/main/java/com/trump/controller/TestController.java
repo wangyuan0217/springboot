@@ -5,9 +5,6 @@ import com.trump.domain.Resume;
 import com.trump.domain.User;
 import com.trump.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-//@RequestMapping(value = "/test")
+@RequestMapping(value = "/test")
 public class TestController extends BaseController {
 
     @Autowired
@@ -40,8 +37,8 @@ public class TestController extends BaseController {
     @ResponseBody
     public Map<String, Object> login(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<>();
-        String userName = request.getParameter("userName");
-        String password = request.getParameter("password");
+        String userName = request.getParameter("name");
+        String password = request.getParameter("pass");
 
         if (!userName.equals("") && password != "") {
             User user = new User(userName, password);
@@ -80,8 +77,7 @@ public class TestController extends BaseController {
         modelAndView.addObject("learnList", learnList);
         return modelAndView;
     }
-
-
+    
     @RequestMapping("/getResumeByUid")
     @ResponseBody
     public String getResumeByUid(HttpServletRequest request, HttpServletResponse response) {
@@ -89,22 +85,5 @@ public class TestController extends BaseController {
         Resume resume = mTestService.getResumeByUid(uid);
         return getCommonReturn(200, "success", resume);
     }
-
-
-    @Autowired
-    private JdbcTemplate mJdbcTemplate;
-
-    @RequestMapping("/getResumeByUid2")
-    @ResponseBody
-    public String getResumeByUid2(HttpServletRequest request, HttpServletResponse response) {
-        String uid = getParameter(request, "uid");
-
-        String sql = "select * from rc_resume where uid = ?";
-        RowMapper<Resume> rowMapper = new BeanPropertyRowMapper<>(Resume.class);
-        Resume resume = mJdbcTemplate.queryForObject(sql, rowMapper, uid);
-
-        return getCommonReturn(200, "success", resume);
-    }
-
 
 }
