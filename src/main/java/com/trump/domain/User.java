@@ -5,30 +5,65 @@ package com.trump.domain;
  */
 public class User {
 
-    private String username;
-    private String password;
+    private String id;
+    private String name;
+    private String pass;
+    private String sex;
+    private String birth;
+    private String address;
 
     public User() {
     }
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public User(String name) {
+        this.name = name;
     }
 
-    public String getUsername() {
-        return username;
+    public String getId() {
+        return id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getPassword() {
-        return password;
+    public String getName() {
+        return name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getBirth() {
+        return birth;
+    }
+
+    public void setBirth(String birth) {
+        this.birth = birth;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

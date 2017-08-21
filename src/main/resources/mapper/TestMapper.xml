@@ -7,4 +7,12 @@
         SELECT * FROM rc_resume WHERE uid = #{uid}
     </select>
 
+    <select id="getUsers" resultType="com.trump.domain.User">
+        SELECT * FROM t_user
+    </select>
+
+    <select id="getUserCount" resultType="int">
+        SELECT count(*) FROM t_user
+    </select>
+
 </mapper>

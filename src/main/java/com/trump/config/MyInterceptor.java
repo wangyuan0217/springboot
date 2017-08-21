@@ -17,7 +17,7 @@ public class MyInterceptor implements HandlerInterceptor {
         boolean flag = true;
         User user = (User) request.getSession().getAttribute("user");
         if (null == user) {
-            response.sendRedirect("toLogin");
+            response.sendRedirect("loginAction");
             flag = false;
         } else {
             flag = true;
@@ -26,7 +26,11 @@ public class MyInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request,
+                           HttpServletResponse response,
+                           Object handler, ModelAndView modelAndView)
+            throws Exception {
+        request.setAttribute("ctx", request.getContextPath());
     }
 
     @Override

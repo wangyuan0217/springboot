@@ -52,6 +52,10 @@ public class BaseController {
         return toJsonStr(mBaseResponse);
     }
 
+    public String getCommonReturn(int code, Object object) {
+        return getCommonReturn(code, "success", object);
+    }
+
     /**
      * 将Object对象转换成为标准的json字符串
      *

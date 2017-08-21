@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>主页</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <!--引入bootstrap样式-->
+    <link th:href="@{/static/open/bootstrap/css/bootstrap.css}" rel="stylesheet" type="text/css"/>
+    <!--引入bootstrap-table样式-->
+    <link th:href="@{/static/open/bootstrap-table/css/bootstrap-table.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div>
+    <!--<table id="mytable"/>-->
+
+    <table id="table"
+           data-toggle="table"
+           data-url="/test/getUsers"
+           data-striped="true"
+           data-side-pagination="server"
+           data-pagination="true"
+           data-query-params-type=""
+           data-page-list="[5, 10, 20]"
+           data-show-refresh="false">
+        <thead>
+        <tr>
+            <th data-field="state" data-checkbox="true"></th>
+            <th data-field="id" data-halign="center" data-align="center">ID</th>
+            <th data-field="name" data-halign="center" data-align="center">姓名</th>
+            <th data-field="pass" data-halign="center" data-align="center">密码</th>
+            <th data-field="sex" data-halign="center" data-align="center">性别</th>
+            <th data-field="birth" data-halign="center" data-align="center">生日</th>
+            <th data-field="address" data-halign="center" data-align="center">地址</th>
+            <th data-formatter="tableAction" data-events="tableActionEvents" data-halign="center" data-align="center">
+                操作
+            </th>
+        </tr>
+        </thead>
+    </table>
+
+</div>
+
+<script type="text/javascript" th:src="@{/static/js/jquery-3.1.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/open/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/open/bootstrap-table/js/bootstrap-table.js}"></script>
+<script type="text/javascript" th:src="@{/static/open/bootstrap-table/local/bootstrap-table-zh-CN.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/open/layui/layui.js}"></script>
+<script type="text/javascript">
+
+    function tableAction(value, row, index) {
+        return '<a class="alter" >修改</a> ' + '<a class="delete">删除</a>';
+    }
+
+    //表格  - 操作 - 事件
+    window.tableActionEvents = {
+        'click .alter': function (e, value, row, index) {
+            //修改操作
+            layui.use('layer', function () {
+                var layer = layui.layer;
+                layer.msg('hello');
+            });
+        },
+        'click .delete': function (e, value, row, index) {
+            //删除操作
+            layer.confirm('确认要删除么？', {title: '提示'}, function (index) {
+                //do something
+
+                layer.close(index);
+            });
+        }
+    }
+
+</script>
+
+</body>
+</html>

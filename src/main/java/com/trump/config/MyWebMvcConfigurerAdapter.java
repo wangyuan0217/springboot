@@ -29,10 +29,15 @@ public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         //这样访问http://localhost:8080/toLogin就跳转到login.jsp页面了
+//        registry.addViewController("moudle/loginAction").setViewName("login");
         registry.addViewController("/loginAction").setViewName("login");
         registry.addViewController("/indexAction").setViewName("index");
+        registry.addViewController("/homeAction").setViewName("home");
         super.addViewControllers(registry);
     }
+
+//    @Autowired
+//    MyInterceptor mMyInterceptor;
 
     /**
      * 添加拦截器
@@ -42,12 +47,10 @@ public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // addPathPatterns 用于添加拦截规则
-        // excludePathPatterns 用户排除拦截
-//        registry.addInterceptor(new MyInterceptor())
-//                //拦截所有请求
-//                .addPathPatterns("/**")
-//                //排除了/toLogin和/login请求的拦截
-//                .excludePathPatterns("/toLogin", "/test/login");
+//         excludePathPatterns 用户排除拦截
+        registry.addInterceptor(new MyInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/loginAction", "/test/login");
         super.addInterceptors(registry);
     }
 

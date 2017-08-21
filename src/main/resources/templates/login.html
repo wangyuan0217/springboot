@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>登录</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <!--引入bootstrap样式-->
+    <link th:href="@{/static/open/bootstrap/css/bootstrap.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+<div style="text-align: center;margin-top: 200px; ">
+    <form action="" id="login"
+          accept-charset="utf-8" method="post">
+
+        <div>
+            <label for="name">帐号：</label>
+            <input class="btn btn-default" type="text" id="name" name="name"/>
+        </div>
+        <div style="margin-top:20px;">
+            <label for="pass">密码：</label>
+            <input class="btn btn-default" type="password" id="pass" name="pass"/>
+        </div>
+
+        <div style="margin-top:35px;">
+            <input class="btn btn-default" type="button" value="登 录" style="width:220px;" onclick="webLogin()"/>
+        </div>
+
+        <img th:src="@{/static/images/1.png}"
+             style="width: 200px;height: 100px;"/>
+
+        <!--<div style="margin-top:35px;">-->
+        <!--<span style="margin-top:35px;">${message}</span>-->
+        <!--</div>-->
+
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/static/js/jquery-3.1.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/jquery.tips.js}"></script>
+<script type="text/javascript" th:src="@{/static/open/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+
+    function webLogin() {
+        if (checkNull()) {
+            $.ajax({
+                type: "GET",
+                url: "/test/login",
+                data: {
+                    "name": $("#name").val(),
+                    "pass": $("#pass").val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.result == "1") {
+                        window.location.href = "homeAction";
+                    } else {
+                        alert("error"); //密码错误...不存在....
+                    }
+                }
+            });
+        }
+    }
+
+    function checkNull() {
+        var name = $("#name").val();
+        if ("" == name) {
+            $("#name").tips({
+                side: 3,
+                msg: '账号不能为空',
+                bg: '#AE81FF',
+                time: 3
+            });
+//            $("#name").focus();    //让u标签获取输入焦点
+            return false;   //返回false，打断js的执行
+        }
+        var pass = $("#pass").val();
+        if (pass == "") {
+            $("#pass").tips({
+                side: 2,
+                msg: '账号不能为空',
+                bg: '#AE81FF',
+                time: 3
+            });
+            $("#pass").focus();
+            return false;
+        }
+        return true;
+    }
+
+</script>
+
+
+</body>
+</html>
