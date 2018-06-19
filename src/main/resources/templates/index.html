@@ -1,76 +1,90 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <title>主页</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
-    <!--引入bootstrap样式-->
-    <link th:href="@{/static/open/bootstrap/css/bootstrap.css}" rel="stylesheet" type="text/css"/>
-    <!--引入bootstrap-table样式-->
-    <link th:href="@{/static/open/bootstrap-table/css/bootstrap-table.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/static/open/layui/css/layui.css}" type="text/css"/>
 </head>
 <body>
-<div>
-    <!--<table id="mytable"/>-->
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">后台布局模板</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">一</a></li>
+            <li class="layui-nav-item"><a href="">二</a></li>
+            <li class="layui-nav-item"><a href="">三</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">四</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">4-1</a></dd>
+                    <dd><a href="">4-2</a></dd>
+                    <dd><a href="">4-3</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img"/>
+                    Name
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">logout</a></li>
+        </ul>
+    </div>
 
-    <table id="table"
-           data-toggle="table"
-           data-url="/test/getUsers"
-           data-striped="true"
-           data-side-pagination="server"
-           data-pagination="true"
-           data-query-params-type=""
-           data-page-list="[5, 10, 20]"
-           data-show-refresh="false">
-        <thead>
-        <tr>
-            <th data-field="state" data-checkbox="true"></th>
-            <th data-field="id" data-halign="center" data-align="center">ID</th>
-            <th data-field="name" data-halign="center" data-align="center">姓名</th>
-            <th data-field="pass" data-halign="center" data-align="center">密码</th>
-            <th data-field="sex" data-halign="center" data-align="center">性别</th>
-            <th data-field="birth" data-halign="center" data-align="center">生日</th>
-            <th data-field="address" data-halign="center" data-align="center">地址</th>
-            <th data-formatter="tableAction" data-events="tableActionEvents" data-halign="center" data-align="center">
-                操作
-            </th>
-        </tr>
-        </thead>
-    </table>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">所有商品</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="toAddUser" target="mainframe">列表一</a></dd>
+                        <dd><a href="static/view/test.html" target="mainframe">列表二</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">解决方案</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">列表一</a></dd>
+                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd><a href="">超链接</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="">云市场</a></li>
+                <li class="layui-nav-item"><a href="">发布商品</a></li>
+            </ul>
+        </div>
+    </div>
 
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+
+        <iframe src="userlist" frameborder="0"
+                width="100%" height="100%" scrolling="no"
+                name="mainframe" id="iframe-page"></iframe>
+    </div>
+
+    <div class="layui-footer" style="visibility: hidden;">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
 </div>
 
 <script type="text/javascript" th:src="@{/static/js/jquery-3.1.1.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/open/bootstrap/js/bootstrap.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/open/bootstrap-table/js/bootstrap-table.js}"></script>
-<script type="text/javascript" th:src="@{/static/open/bootstrap-table/local/bootstrap-table-zh-CN.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/open/layui/layui.js}"></script>
-<script type="text/javascript">
-
-    function tableAction(value, row, index) {
-        return '<a class="alter" >修改</a> ' + '<a class="delete">删除</a>';
-    }
-
-    //表格  - 操作 - 事件
-    window.tableActionEvents = {
-        'click .alter': function (e, value, row, index) {
-            //修改操作
-            layui.use('layer', function () {
-                var layer = layui.layer;
-                layer.msg('hello');
-            });
-        },
-        'click .delete': function (e, value, row, index) {
-            //删除操作
-            layer.confirm('确认要删除么？', {title: '提示'}, function (index) {
-                //do something
-
-                layer.close(index);
-            });
-        }
-    }
-
+<script type="text/javascript" th:src="@{/static/open/layui/layui.all.js}"></script>
+<script>
+    $('a[target=mainframe]').on('click', function () {
+        window.open($(this).attr('href') + '?datetime=' + new Date().getTime(), 'mainframe');
+        return false;
+    });
 </script>
-
 </body>
 </html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>主页</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link th:href="@{/static/open/layui/css/layui.css}" rel="stylesheet" type="text/css" media="all"/>
+    <link th:href="@{/static/open/layui/css/modules/laydate/default/laydate.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/static/open/bootstrap/css/bootstrap.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/static/open/bootstrap-table/css/bootstrap-table.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+<div>
+    <div id="query">
+        <label>000000</label>
+        <ol class="breadcrumb">
+            <li><strong><span style="color: #27a0d7">用户列表</span></strong></li>
+        </ol>
+        <form class="form-inline" role="form" method="post" id="queryForm">
+            <div class="form-group">
+                <label for="userName">名称:</label>
+                <input type="text" class="form-control" name="userName" id="userName" placeholder="请输入名称">
+            </div>
+            <div class="form-group">
+                <label>日期:</label>
+                <input placeholder="开始日期" class="form-control layer-date" id="startDate" name="startDate">
+                <input placeholder="结束日期" class="form-control layer-date" id="endDate" name="endDate">
+            </div>
+            <div class="form-group">
+                <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+            </div>
+            <div class="form-group btn-right">
+                <button type="button" class="btn btn-primary" id="addBtn" onclick="addUser();">新增用户</button>
+            </div>
+        </form>
+    </div>
+    <div class="container" style="width: 100%;margin-top: 20px">
+        <table id="mytable"/>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/static/js/jquery-3.1.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/open/layui/layui.all.js}"></script>
+<script type="text/javascript" th:src="@{/static/open/layui/lay/modules/laydate.js}"></script>
+<script type="text/javascript" th:src="@{/static/open/bootstrap/js/bootstrap.js}"></script>
+<script type="text/javascript" th:src="@{/static/open/bootstrap-table/js/bootstrap-table.js}"></script>
+<script type="text/javascript" th:src="@{/static/open/bootstrap-table/js/bootstrap-table-locale-all.js}"></script>
+<script type="text/javascript" th:src="@{/static/open/bootstrap-table/local/bootstrap-table-zh-CN.min.js}"></script>
+<script type="text/javascript">
+    function tableAction(value, row, index) {
+        //value: 该cell的值 row: 该行的数据 index: 该行的序号
+        return '<a id="alter">修改</a>&nbsp;&nbsp;&nbsp;'
+            + '<a id="delete">删除</a>';
+    }
+
+    //表格  - 操作 - 事件
+    window.tableActionEvents = {
+        "click #alter": function (e, value, row, index) {
+            //修改操作
+            parent.layer.msg("修改");
+        },
+        'click #delete': function (e, value, row, index) {
+            //删除操作
+            parent.layer.confirm('确认要删除么？', {title: '提示'}, function (index2) {
+
+                $('#table').bootstrapTable('remove', {
+                    field: 'id',
+                    values: row.id
+                });
+                window.parent.layer.close(index2);
+            });
+        }
+    };
+
+    $(function () {
+        initTable();
+        initDate();
+    });
+
+    function initTable() {
+        $('#mytable').bootstrapTable({
+            method: 'get',
+            dataType: 'json',
+            contentType: "application/x-www-form-urlencoded",
+            cache: false,
+            striped: true,                      //是否显示行间隔色
+            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+            url: "user/getUsers",
+            height: $(window).height() - 110,
+            width: $(window).width(),
+            pagination: true,
+            queryParams: queryParams,
+            queryParamsType: "default",
+            pageNumber: 1,                      //初始化加载第一页，默认第一页
+            pageSize: 10,                       //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+            uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+            responseHandler: responseHandler,
+            columns: [
+                {
+                    field: '',
+                    title: 'No.',
+                    align: 'center',
+                    width: '10%',
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                },
+                {
+                    field: 'id',
+                    title: 'id',
+                    align: 'center',
+                    width: '10%',
+                    valign: 'middle',
+                    sortable: true
+                }, {
+                    field: 'name',
+                    title: 'name',
+                    align: 'center',
+                    width: '10%',
+                    valign: 'middle',
+                    sortable: true
+                }, {
+                    field: 'pass',
+                    title: 'pass',
+                    align: 'center',
+                    width: '10%',
+                    valign: 'middle'
+                }, {
+                    field: 'sex',
+                    title: 'sex',
+                    align: 'center',
+                    width: '10%',
+                    valign: 'middle',
+                    sortable: true
+                }, {
+                    field: 'birth',
+                    title: 'birth',
+                    align: 'center',
+                    width: '15%',
+                    valign: 'middle'
+                }, {
+                    field: 'address',
+                    title: 'address',
+                    align: 'center',
+                    width: '20%',
+                    valign: 'left'
+                }, {
+                    title: '操作',
+                    align: 'center',
+                    width: '15%',
+                    valign: 'left',
+                    events: tableActionEvents,
+                    formatter: tableAction
+                }]
+        })
+        ;
+    }
+
+    function initDate() {
+        var start = {
+            elem: '#startDate',
+            format: 'YYYY-MM-DD hh:mm:ss',
+            min: laydate.now(-7),
+            max: laydate.now(),
+            istime: true,
+            istoday: false,
+            choose: function (datas) {
+                end.min = datas; //开始日选好后，重置结束日的最小日期
+                end.start = datas //将结束日的初始值设定为开始日
+            }
+        };
+        var end = {
+            elem: '#endDate',
+            format: 'YYYY-MM-DD hh:mm:ss',
+            min: laydate.now(-7),
+            max: laydate.now(),
+            istime: true, //是否开启时间选择
+            isclear: true, //是否显示清空
+            istoday: true, //是否显示今天
+            issure: true, //是否显示确认
+            choose: function (datas) {
+                start.max = datas; //结束日选好后，重置开始日的最大日期
+            }
+        };
+        laydate(start);
+        laydate(end);
+    }
+
+    function queryParams(params) {
+        var param = {
+            page: this.pageNumber,
+            limit: this.pageSize
+        }
+        return param;
+    }
+
+    // 用于server 分页，表格数据量太大的话 不想一次查询所有数据，
+    // 可以使用server分页查询，数据量小的话可以直接把sidePagination: "server"  改为 sidePagination: "client" ，
+    // 同时去掉responseHandler: responseHandler就可以了，
+    function responseHandler(res) {
+        if (res) {
+            return {
+                "rows": res.data,
+                "total": res.totals
+            };
+        } else {
+            return {
+                "rows": [],
+                "total": 0
+            };
+        }
+    }
+
+    function addUser() {
+        window.location.href = 'adduser';
+    }
+
+</script>
+
+</body>
+</html>

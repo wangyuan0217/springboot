@@ -14,15 +14,18 @@
           accept-charset="utf-8" method="post">
 
         <div>
-            <label for="name">帐号：</label>
+            <label for="name">账号：</label>
             <input class="btn btn-default" type="text" id="name" name="name"/>
         </div>
         <div style="margin-top:20px;">
             <label for="pass">密码：</label>
             <input class="btn btn-default" type="password" id="pass" name="pass"/>
         </div>
+        <div style="margin-top:8px;">
+            <label id="errortip"></label>
+        </div>
 
-        <div style="margin-top:35px;">
+        <div style="margin-top:12px;">
             <input class="btn btn-default" type="button" value="登 录" style="width:220px;" onclick="webLogin()"/>
         </div>
 
@@ -32,7 +35,6 @@
         <!--<div style="margin-top:35px;">-->
         <!--<span style="margin-top:35px;">${message}</span>-->
         <!--</div>-->
-
     </form>
 </div>
 
@@ -45,7 +47,7 @@
         if (checkNull()) {
             $.ajax({
                 type: "GET",
-                url: "/test/login",
+                url: "/user/login",
                 data: {
                     "name": $("#name").val(),
                     "pass": $("#pass").val()
@@ -53,9 +55,9 @@
                 dataType: "json",
                 success: function (data) {
                     if (data.result == "1") {
-                        window.location.href = "homeAction";
+                        window.location.href = "index";
                     } else {
-                        alert("error"); //密码错误...不存在....
+                        $("#errortip").html(data.errortip);
                     }
                 }
             });
@@ -71,8 +73,10 @@
                 bg: '#AE81FF',
                 time: 3
             });
-//            $("#name").focus();    //让u标签获取输入焦点
-            return false;   //返回false，打断js的执行
+            //让u标签获取输入焦点
+            $("#name").focus();
+            //返回false，打断js的执行
+            return false;
         }
         var pass = $("#pass").val();
         if (pass == "") {

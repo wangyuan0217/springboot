@@ -1,6 +1,7 @@
 package com.trump.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.trump.config.Constant;
 import com.trump.domain.PageBean;
 import com.trump.domain.Resume;
 import com.trump.domain.User;
@@ -31,6 +32,12 @@ public class TestServiceImpl implements TestService {
 
         PageHelper.startPage(pageNumber, pageSize);
         List<User> users = mTestDao.getUsers();
-        return new PageBean<User>(total, users);
+        return new PageBean<>(Constant.CODE.SUCCESS, total, users);
+    }
+
+    @Override
+    public PageBean<User> getUsers2() {
+        List<User> users = mTestDao.getUsers2();
+        return new PageBean<User>(Constant.CODE.SUCCESS, users.size(), users);
     }
 }

@@ -6,13 +6,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.sql.DataSource;
 
 @SpringBootApplication  // same as @Configuration @EnableAutoConfiguration @ComponentScan
-//@EnableScheduling
+@EnableScheduling
 //@EnableTransactionManagement //开启事务支持，建议在启动类上增加
 @RestController
 public class Application {
@@ -43,7 +44,6 @@ public class Application {
         dataSource.setPoolPreparedStatements(false);//是否缓存preparedStatement，也就是PSCache
         return dataSource;
     }
-
 
     @RequestMapping("/")
     public String index() {

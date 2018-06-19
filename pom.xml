@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -84,6 +85,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.43</version>
         </dependency>
+
         <!--druid数据源配置（Spring Boot默认使用tomcat-jdbc数据源）-->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -105,8 +107,41 @@
             <version>2.8.1</version>
         </dependency>
 
+        <!--thymeleaf+spring.thymeleaf.mode=LEGACYHTML5-->
+        <!--使得html缺少/标签也不报错-->
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+        </dependency>
+
+
+        <!--&lt;!&ndash;关于Redis:一个基于键值对存储的NoSQL内存数据库，可存储复杂的数据结构，-->
+        <!--如List, Set, Hashes。&ndash;&gt;-->
+        <!--&lt;!&ndash;关于Spring Data Redis:简称SDR, 能让Spring应用更加方便配置和访问Redis。&ndash;&gt;-->
+        <!--&lt;!&ndash;http://www.cnblogs.com/chenpi/p/6329636.html&ndash;&gt;-->
+        <!--&lt;!&ndash;Starter for using Redis key-value data store with Spring Data Redis and the Jedis client&ndash;&gt;-->
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-data-redis</artifactId>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash;http://www.cnblogs.com/chenpi/p/6347299.html&ndash;&gt;-->
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.session</groupId>-->
+        <!--<artifactId>spring-session-data-redis</artifactId>-->
+        <!--</dependency>-->
+
+
+        <!--web socket start-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <!--web socket end-->
+
     </dependencies>
 
+    <!-- Package as an executable jar -->
     <build>
         <!--打包的名字-->
         <finalName>trump</finalName>
@@ -114,11 +149,23 @@
         <plugins>
             <!-- spring dev -->
             <plugin>
+                <!--jar 打包依赖-->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <dependencies>
+                    <!--热部署-->
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>springloaded</artifactId>
+                        <version>1.2.7.RELEASE</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
-                    <mainClass>com.trump.Application</mainClass>
-                    <jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
+                    <fork>true</fork>
+                    <!--<excludeDevtools>false</excludeDevtools>-->
+                    <!--Then you need to set a spring.devtools.remote.secret property,
+                    for example:-->
+                    <!--spring.devtools.remote.secret=mysecret-->
                 </configuration>
                 <executions>
                     <execution>

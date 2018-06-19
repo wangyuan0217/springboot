@@ -12,4 +12,6 @@ public interface TestService {
     Resume getResumeByUid(String uid);
 
     PageBean<User> getUsers(int pageNumber, int pageSize);
+
+    PageBean<User> getUsers2();
 }
